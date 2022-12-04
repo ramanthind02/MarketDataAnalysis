@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import sys
-<<<<<<< HEAD
 import seaborn
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
@@ -10,6 +9,8 @@ import re
 
 filename_re = re.compile(r"([^/]*)\.pkl$")
 
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
 # from statsmodels.regression.linear_model import OLS
 
 pickle_dtypes = {
@@ -60,16 +61,22 @@ if __name__ == "__main__":
     seaborn.set()
     main(sys.argv[1], sys.argv[2])
 def main(first_pair_loc, second_pair_loc):
-    pair1 = pd.read_pickle(first_pair_loc).astype(pickle_dtypes)
-    pair2 = pd.read_pickle(second_pair_loc).astype(pickle_dtypes)
+    p1 = pd.read_pickle(first_pair_loc).astype(pickle_dtypes).set_index("time")
+    p2 = pd.read_pickle(second_pair_loc).astype(pickle_dtypes).set_index("time")
+    p1_bid = p1["bid_o"]
+    p2_bid = p2["bid_o"]
 
-    corr_res = pair1["bid_o"].corr(pair2["bid_o"])
-    print(pair1)
-    print(pair2)
+    corr_res = p1_bid.corr(p2_bid)
+    print(corr_res)
+    scaled_p1 = p1_bid / p1_bid.max()
+    scaled_p2 = p2_bid / p2_bid.max()
+    scaled_p1.plot()
+    scaled_p2.plot()    # scaled to 0 and 1
+    plt.show()
+    corr_res = scaled_p1.corr(scaled_p2)
     print(corr_res)
 
 
 if __name__ == "__main__":
-    first_pair_loc = sys.argv[1]
-    second_pair_loc = sys.argv[2]
-    main(first_pair_loc, second_pair_loc)
+    seaborn.set()
+    main(sys.argv[1], sys.argv[2])
