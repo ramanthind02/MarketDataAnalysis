@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import sys
+<<<<<<< HEAD
 import seaborn
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
@@ -8,6 +9,8 @@ import re
 # from statsmodels.regression.linear_model import OLS
 
 filename_re = re.compile(r"([^/]*)\.pkl$")
+
+# from statsmodels.regression.linear_model import OLS
 
 pickle_dtypes = {
     "time": np.datetime64,
@@ -56,3 +59,17 @@ def main(first_pair_loc, second_pair_loc):
 if __name__ == "__main__":
     seaborn.set()
     main(sys.argv[1], sys.argv[2])
+def main(first_pair_loc, second_pair_loc):
+    pair1 = pd.read_pickle(first_pair_loc).astype(pickle_dtypes)
+    pair2 = pd.read_pickle(second_pair_loc).astype(pickle_dtypes)
+
+    corr_res = pair1["bid_o"].corr(pair2["bid_o"])
+    print(pair1)
+    print(pair2)
+    print(corr_res)
+
+
+if __name__ == "__main__":
+    first_pair_loc = sys.argv[1]
+    second_pair_loc = sys.argv[2]
+    main(first_pair_loc, second_pair_loc)
