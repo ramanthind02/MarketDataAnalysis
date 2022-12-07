@@ -9,10 +9,6 @@ import re
 
 filename_re = re.compile(r"([^/]*)\.pkl$")
 
-from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as plt
-# from statsmodels.regression.linear_model import OLS
-
 pickle_dtypes = {
     "time": np.datetime64,
     "volume": np.int64,
@@ -38,43 +34,41 @@ def filepath_to_filename(name):
     return None
 
 
-def main(first_pair_loc, second_pair_loc):
-    p1 = pd.read_pickle(first_pair_loc).astype(pickle_dtypes).set_index("time")
-    p2 = pd.read_pickle(second_pair_loc).astype(pickle_dtypes).set_index("time")
-    p1_bid = p1["bid_o"]
-    p2_bid = p2["bid_o"]
-
-    corr_res = p1_bid.corr(p2_bid)
-    print(corr_res)
-    scaled_p1 = p1_bid / p1_bid.max()
-    scaled_p2 = p2_bid / p2_bid.max()
-    plt.title("Asset Price Trends")
-    plt.xlabel("Time")
-    plt.ylabel("Relative Difference Compared to Max in Time Interval")
-    scaled_p1.plot(label=filepath_to_filename(first_pair_loc))
-    scaled_p2.plot(label=filepath_to_filename(second_pair_loc))    # scaled to 0 and 1
-    plt.legend()
-    plt.show()
+def get_pickle_df_bid_o(file):
+    df = pd.read_pickle(file).astype(pickle_dtypes).set_index("time")
+    df = df["bid_o"]
+    return df
 
 
-if __name__ == "__main__":
-    seaborn.set()
-    main(sys.argv[1], sys.argv[2])
-def main(first_pair_loc, second_pair_loc):
-    p1 = pd.read_pickle(first_pair_loc).astype(pickle_dtypes).set_index("time")
-    p2 = pd.read_pickle(second_pair_loc).astype(pickle_dtypes).set_index("time")
-    p1_bid = p1["bid_o"]
-    p2_bid = p2["bid_o"]
+def corr_two_files(first_pair_loc, second_pair_loc, output_file_name=None):
+    first_pair_fn = filepath_to_filename(first_pair_loc)
+    second_pair_fn = filepath_to_filename(second_pair_loc)
+    p1_bid = get_pickle_df_bid_o(first_pair_loc).rename(first_pair_fn)
+    p2_bid = get_pickle_df_bid_o(second_pair_loc).rename(second_pair_fn)
+
+    # join on time to get rid of missing fields
+    joined = pd.concat([p1_bid, p2_bid], axis=1).dropna()
+    p1_bid = joined[first_pair_fn]
+    p2_bid = joined[second_pair_fn]
 
     corr_res = p1_bid.corr(p2_bid)
     print(corr_res)
     scaled_p1 = p1_bid / p1_bid.max()
     scaled_p2 = p2_bid / p2_bid.max()
     scaled_p1.plot()
-    scaled_p2.plot()    # scaled to 0 and 1
-    plt.show()
-    corr_res = scaled_p1.corr(scaled_p2)
-    print(corr_res)
+    scaled_p2.plot()  # scaled to 0 and 1
+    plt.legend()
+    plt.xlabel("Time")
+    plt.ylabel("Relative Value To Max Value")
+    plt.title("Relation Between Two Pairs")
+    if output_file_name is None:
+        plt.show()
+    else:
+        plt.savefig(fname=output_file_name + ".png", format="png")
+
+
+def main(first_pair_loc, second_pair_loc):
+    corr_two_files(first_pair_loc, second_pair_loc)
 
 
 if __name__ == "__main__":
