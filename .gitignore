@@ -1,3 +1,6 @@
 keys.py
 *.DS_Store
 *.vscode
+.idea/
+.ipynb_checkpoints/
+__pycache__/

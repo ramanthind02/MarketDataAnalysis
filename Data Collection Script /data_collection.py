@@ -7,7 +7,7 @@ import sys
 
 
 TIMEFRAMES = {
-    'M5' : 5,
+    # 'M5' : 5,
     'H1' : 60,
     'H4' : 240, 
     'D'   : 1440 
@@ -65,7 +65,7 @@ def create_file(pair, granularity, api):
     final_df.to_pickle(function.get_data_filename(pair, granularity))
     print(f"{pair} {granularity} {final_df.iloc[0].time}  {final_df.iloc[-1].time}")
 
-def run_collection():
+def run_collection(pairs):
     pair_list = pairs.split(',')
     oanda_api = OandaAPI()
     for timeframes in TIMEFRAMES.keys():
@@ -73,7 +73,7 @@ def run_collection():
             create_file(pairs, timeframes, oanda_api)
 
 
-def main(pairs): 
+def main(pairs):
 
     run_collection(pairs)
 
