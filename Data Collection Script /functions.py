@@ -12,7 +12,7 @@ def get_utc_dt_from_string(date_str):
 
 
 def get_data_filename(pair, granularity):
-    return f"data/{pair}_{granularity}.pkl"
+    return f"../data/{pair}_{granularity}.pkl"
 
 def get_instruments_filename():
     return "instruments.pkl"
