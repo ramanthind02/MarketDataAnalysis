@@ -26,6 +26,16 @@ pickle_dtypes = {
     "ask_c": np.float64
 }
 
+pickle_crypto_dtypes = {
+    "high": np.float64,
+    "low": np.float64,
+    "open": np.float64,
+    "close": np.float64,
+    "volume": np.float64,
+    "quoteVolume": np.float64,
+    "weightedAverage": np.float64
+}
+
 
 def filepath_to_filename(name):
     for match in filename_re.finditer(name):
@@ -37,6 +47,12 @@ def filepath_to_filename(name):
 def get_pickle_df_bid_o(file):
     df = pd.read_pickle(file).astype(pickle_dtypes).set_index("time")
     df = df["bid_o"]
+    return df
+
+
+def get_crypto_pickle_df(file):
+    df = pd.read_pickle(file).astype(pickle_crypto_dtypes)
+    df = df["open"]
     return df
 
 
