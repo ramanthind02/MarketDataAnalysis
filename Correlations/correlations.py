@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import sys
 import seaborn
-from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import re
 # from statsmodels.regression.linear_model import OLS
