@@ -27,6 +27,7 @@ Are the markets following a random walk? (Are the markets random?)
 - Matplotlib
 - Seaborn
 - hmmlearn
+- plotly
 
 ## How to Run
 - Requires API key from OANDA saved into `keys.py` file in `Data Collection Script` folder
@@ -46,3 +47,4 @@ Are the markets following a random walk? (Are the markets random?)
     names of the pairs (instruments). Instruments have been obtained and moved into an `instruments.pkl` file.
   - Option 2: Use the `Data Collection Script/get_currencies.ipynb` to get the currencies.
 - Acquire data from Poloniex by running the `Data Collection Script/poloniex/get_crypto.ipynb` file
+- Run the Jupyter scripts in the `Correlations` folder or project folder to perform statistical analyses on the data
